@@ -1,5 +1,6 @@
 package com.example.belajarapi;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,25 +14,24 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class LaLigaActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private TeamAdapter adapter;
     private ProgressBar progressBar;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_la_liga);
 
         recyclerView = findViewById(R.id.rvTeam);
         progressBar = findViewById(R.id.pbLoading);
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         ApiService apiService = ApiClient.getRetrofit().create(ApiService.class);
 
-        apiService.getAllTeams("English Premier League").enqueue(new Callback<TeamResponse>() {
+        apiService.getAllTeams("Spanish La Liga").enqueue(new Callback<TeamResponse>() {
             @Override
             public void onResponse(Call<TeamResponse> call, Response<TeamResponse> response) {
                 Log.d("TESTING_LOG", "Masuk onResponse");
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
                     List<TeamModel> teamModelList = response.body().getTeams();
-                    adapter = new TeamAdapter(MainActivity.this, teamModelList);
+                    adapter = new TeamAdapter(LaLigaActivity.this, teamModelList);
                     recyclerView.setAdapter(adapter);
 
                 }
